@@ -92,21 +92,28 @@ def qr_fact_househ(matrix):
 
 def qr_fact_givens(matrix):
     size = matrix.shape[1]
-    bit = max(matrix.shape)
-    working = np.zeroes(matrix.shape) + matrix
+    working = np.zeros(matrix.shape) + matrix
     gs = []
-    for col in range(size - 1):
-        for row in range(col, size - 1):
+    for col in range(size):
+        for row in range(col+1, size):
             x, y = working[col,col], working[row, col]
             sqrtx2y2 = math.sqrt(x**2 + y**2)
             c = x / sqrtx2y2
             s = -y / sqrtx2y2
+            givensmat = np.eye(size)
+            givensmat[col,col] = c
+            givensmat[row,row] = c
+            givensmat[col,row] = -s
+            givensmat[row,col] = s
+            working = mult(givensmat, working)
+            gs.append(givensmat)
 
 
-q, r, e = qr_fact_househ(pascal_matrix(4))
-print q
-print r
-print mult(q, r)
-print pascal_matrix(4)
-print e
-assert np.allclose(mult(q, r), pascal_matrix(4))
+    q = reduce(mult, (g.T for g in gs))
+    r = mult(reduce(mult, gs[::-1]), matrix)
+    err = norm_inf(mult(q, r) - matrix)
+    return q, r, err
+
+
+q, r, e = qr_fact_givens(np.array(pascal_matrix(4)))
+#assert np.allclose(mult(q, r), pascal_matrix(4))

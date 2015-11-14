@@ -84,11 +84,12 @@ def qr_fact_househ(matrix):
         working = mult(H, working)
         hs.append(H)
 
-    q_mat = reduce(mult, hs)
-    r_mat = mult(reduce(mult, hs[::-1]), matrix)
+    q_mat = reduce(mult, hs, np.eye(size))
+    r_mat = mult(reduce(mult, hs[::-1], np.eye(size)), matrix)
     err = norm_inf(mult(q_mat, r_mat) - matrix)
 
     return q_mat, r_mat, err
+
 
 def qr_fact_givens(matrix):
     size = matrix.shape[1]
@@ -96,24 +97,62 @@ def qr_fact_givens(matrix):
     gs = []
     for col in range(size):
         for row in range(col+1, size):
-            x, y = working[col,col], working[row, col]
+            x, y = working[col, col], working[row, col]
             sqrtx2y2 = math.sqrt(x**2 + y**2)
             c = x / sqrtx2y2
             s = -y / sqrtx2y2
             givensmat = np.eye(size)
-            givensmat[col,col] = c
-            givensmat[row,row] = c
-            givensmat[col,row] = -s
-            givensmat[row,col] = s
+            givensmat[col, col] = c
+            givensmat[row, row] = c
+            givensmat[col, row] = -s
+            givensmat[row, col] = s
             working = mult(givensmat, working)
             gs.append(givensmat)
 
-
-    q = reduce(mult, (g.T for g in gs))
-    r = mult(reduce(mult, gs[::-1]), matrix)
+    q = reduce(mult, (g.T for g in gs), np.eye(size))
+    r = mult(reduce(mult, gs[::-1], np.eye(size)), matrix)
     err = norm_inf(mult(q, r) - matrix)
     return q, r, err
 
 
-q, r, e = qr_fact_givens(np.array(pascal_matrix(4)))
-#assert np.allclose(mult(q, r), pascal_matrix(4))
+def solve_lu_b(A, b):
+    l, u, err = lu_fact(A)
+    b_copy = b.copy()
+    c_vec = [0 for n in b]
+    for row in range(len(b)):
+        curr = b_copy[row]
+        for col in range(row):
+            curr -= l[row, col] * c_vec[col]
+        c_vec[row] = curr / l[row, row]
+
+    x_vec = [0 for n in b]
+    for row in range(len(b)-1, -1, -1):
+        curr = c_vec[row]
+        col = len(b) - 1
+        while col > row:
+            curr -= u[row, col] * x_vec[col]
+            col -= 1
+        x_vec[row] = curr / u[row, row]
+
+    x_vec = np.array(x_vec)
+    sol_err = norm_inf(mult(A, x_vec) - b)
+    return x_vec, err, sol_err
+
+
+def solve_qr_b(A, b):
+    q, r, err = qr_fact_househ(A)
+    c_vec = mult(q.T, b)
+
+    x_vec = [0 for n in b]
+    for row in range(len(b)-1, -1, -1):
+        curr = c_vec[row]
+        col = len(b) - 1
+        while col > row:
+            curr -= r[row, col] * x_vec[col]
+            col -= 1
+        x_vec[row] = curr / r[row, row]
+
+    x_vec = np.array(x_vec)
+    sol_err = norm_inf(mult(A, x_vec) - b)
+    return x_vec, err, sol_err
+

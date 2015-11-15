@@ -37,7 +37,7 @@ def mult(a, b):
 
 
 def norm_inf(matrix):
-    return max(sum(np.nditer(row)) for row in matrix)
+    return max(abs(sum(np.nditer(row))) for row in matrix)
 
 def norm(vector):
     return math.sqrt(sum(float(x)**2 for x in np.nditer(vector)))

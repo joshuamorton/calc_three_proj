@@ -53,3 +53,21 @@ def gs_iter(x_0, epsilon, max_iter):
 
 def rand_vec():
     return np.random.rand(3, 1) * 2 - 1
+
+
+def generate_data():
+    jacobi_array = []
+    gs_array = []
+
+    for i in range(100):
+        x0 = rand_vec()
+        xn, iterations = jacobi_iter(x0, .00005, 100)
+        jacobi_array.append(x0, xn, iterations)
+
+    for i in range(100):
+        x0 = rand_vec()
+        xn, iterations = gs_iter(x0, .00005, 100)
+        gs_array.append(x0, xn, iterations)
+
+    return jacobi_array, gs_array
+

@@ -56,6 +56,8 @@ def generate_data():
                                         np.array([1, 1]).reshape(2, 1), .00005,
                                         100)
         trace = np.trace(mat)
-        data_array.append(determinant, trace, iterations_max, iterations_min)
+        if all([determinant, trace, iterations_max, iterations_min]):
+            data_array.append((determinant, trace, iterations_max, iterations_min))
+            i+= 1
     return data_array
 

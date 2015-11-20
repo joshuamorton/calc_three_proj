@@ -62,12 +62,12 @@ def generate_data():
     for i in range(100):
         x0 = rand_vec()
         xn, iterations = jacobi_iter(x0, .00005, 100)
-        jacobi_array.append(x0, xn, iterations)
+        jacobi_array.append((x0, xn, iterations))
 
     for i in range(100):
         x0 = rand_vec()
         xn, iterations = gs_iter(x0, .00005, 100)
-        gs_array.append(x0, xn, iterations)
+        gs_array.append((x0, xn, iterations))
 
     return jacobi_array, gs_array
 

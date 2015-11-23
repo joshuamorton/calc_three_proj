@@ -69,6 +69,6 @@ mins = [float(m)/small for m in mins]
 plt.scatter(ds, ts, c=maxs)
 plt.savefig('./power_mat.png')
 plt.clf()
-plt.scatter(ds, tis, c=mins)
+plt.scatter([1.0/d for d in ds], tis, c=mins)
 plt.savefig('./power_inv.png')
 plt.clf()

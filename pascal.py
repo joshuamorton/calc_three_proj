@@ -159,7 +159,14 @@ def solve_qr_b(A, b):  # 1c
 
 def load_matrix(file):
     with open(file) as f:
-        np.matrix([line.split(",") for line in f.readlines()], dtype='double')
+        return np.matrix([line.split(",") for line in f.readlines()], dtype='double')
+
+
+def convert_matrix(m):
+    A = m[:, :-1]
+    b = m[:, -1]
+    return A, b
+
 
 def main():  # 1d
     print "solving with lu"

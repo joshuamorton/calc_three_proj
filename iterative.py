@@ -2,7 +2,7 @@ import numpy as np
 import pascal
 
 
-def jacobi_iter(x_0, epsilon, max_iter):
+def jacobi_iter(x_0, epsilon, max_iter):  # 2a
     A = np.matrix([[1.0, 1.0/2, 1.0/3], [1.0/2, 1.0, 1.0/4], [1.0/3, 1.0/4, 1.0]])
     b = np.array([.1, .1, .1]).reshape(3, 1)
     iteration = 0
@@ -21,7 +21,7 @@ def jacobi_iter(x_0, epsilon, max_iter):
         return None, None
 
 
-def gs_iter(x_0, epsilon, max_iter):
+def gs_iter(x_0, epsilon, max_iter):  # 2a
     A = np.matrix([[1.0, 1.0/2, 1.0/3], [1.0/2, 1.0, 1.0/4], [1.0/3, 1.0/4, 1.0]])
     B = np.array([.1, .1, .1]).reshape(3, 1)
     S_inv = np.zeros((3, 3))
@@ -55,7 +55,7 @@ def rand_vec():
     return np.random.rand(3, 1) * 2 - 1
 
 
-def generate_data():
+def generate_data():  # 2b
     jacobi_array = []
     gs_array = []
 

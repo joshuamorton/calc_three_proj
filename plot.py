@@ -37,7 +37,7 @@ jacobi, gs = iterative.generate_data()
 j_vals = [i[1] for i in jacobi]
 g_vals = [i[1] for i in gs]
 
-jacobi_approx = sum(j_vals) / len(j_vals)
+jacobi_approx = sum(j_vals) / len(j_vals)  # 2c
 gs_approx = sum(g_vals) / len(g_vals)
 
 print("Averages, jacobi then gauss-seidel, then iterations")
@@ -57,8 +57,9 @@ plt.clf()
 powers = power.generate_data()
 ds = [p[0] for p in powers if p[0] is not None]
 ts = [p[1] for p in powers if p[1] is not None]
-maxs = [p[2] for p in powers if p[2] is not None]
-mins = [p[3] for p in powers if p[3] is not None]
+tis = [p[2] for p in powers if p[2] is not None]
+maxs = [p[3] for p in powers if p[3] is not None]
+mins = [p[4] for p in powers if p[4] is not None]
 big = max(maxs)
 small = max(mins)
 maxs = [float(m)/big for m in maxs]
@@ -68,6 +69,6 @@ mins = [float(m)/small for m in mins]
 plt.scatter(ds, ts, c=maxs)
 plt.savefig('./power_mat.png')
 plt.clf()
-plt.scatter(ds, ts, c=mins)
+plt.scatter(ds, tis, c=mins)
 plt.savefig('./power_inv.png')
 plt.clf()

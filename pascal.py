@@ -43,7 +43,7 @@ def norm(vector):
     return math.sqrt(sum(float(x)**2 for x in np.nditer(vector)))
 
 
-def lu_fact(matrix):
+def lu_fact(matrix):  # 1a
     """
     computes the LU factorization of a matrix
     """
@@ -64,7 +64,7 @@ def lu_fact(matrix):
     return l_mat, u_mat, err
 
 
-def qr_fact_househ(matrix):
+def qr_fact_househ(matrix):  # 1b
     size = matrix.shape[1]
     big = max(matrix.shape)
     working = np.zeros(matrix.shape) + matrix  # copy
@@ -91,7 +91,7 @@ def qr_fact_househ(matrix):
     return q_mat, r_mat, err
 
 
-def qr_fact_givens(matrix):
+def qr_fact_givens(matrix):  # 1b
     size = matrix.shape[1]
     working = np.zeros(matrix.shape) + matrix
     gs = []
@@ -115,7 +115,7 @@ def qr_fact_givens(matrix):
     return q, r, err
 
 
-def solve_lu_b(A, b):
+def solve_lu_b(A, b):  # 1c
     l, u, err = lu_fact(A)
     b_copy = b.copy()
     c_vec = [0 for n in b]
@@ -139,7 +139,7 @@ def solve_lu_b(A, b):
     return x_vec, err, sol_err
 
 
-def solve_qr_b(A, b):
+def solve_qr_b(A, b):  # 1c
     q, r, err = qr_fact_househ(A)
     c_vec = mult(q.T, b)
 
@@ -155,4 +155,25 @@ def solve_qr_b(A, b):
     x_vec = np.array(x_vec)
     sol_err = norm_inf(mult(A, x_vec) - b)
     return x_vec, err, sol_err
+
+
+def main():  # 1d
+    print "solving with lu"
+    for i in range(2, 13):
+        x, err, sol_err = solve_lu_b(pascal_matrix(i), harmonic_vector(i))
+        print i
+        print x
+        print "norm(LU-P), norm(Px-b)"
+        print err, sol_err
+        print ""
+
+
+    print "solving with qr"
+    for i in range(2, 13):
+        x, err, sol_err = solve_qr_b(pascal_matrix(i), harmonic_vector(i))
+        print i
+        print x
+        print "norm(QR-P), norm(Px-b)"
+        print err, sol_err
+        print ""
 

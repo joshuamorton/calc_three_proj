@@ -2,7 +2,7 @@ import pascal
 import numpy as np
 
 
-def power_method(A, v, epsilon, max_iter):
+def power_method(A, v, epsilon, max_iter):  # 3a
     """
     return lambda, e or (None, None)
     """
@@ -14,7 +14,7 @@ def power_method(A, v, epsilon, max_iter):
     u_n = u_0
     while iteration < max_iter:
         u_1 = pascal.mult(A, u_n)
-        # u_1 = u_1 / pascal.norm(u_1)  # normalize
+        u_1 = u_1 / pascal.norm(u_1)  # normalize
         error = pascal.norm_inf(u_1 / pascal.norm(u_1) - u_n / pascal.norm(u_n))
         if epsilon > error:
             l = pascal.mult(w.T, u_1) / pascal.mult(w.T, u_n) 
@@ -40,7 +40,7 @@ def inv(A):
     return np.matrix([[d, -b], [-c, a]]) * det, det
 
 
-def generate_data():
+def generate_data():  # 3b
     i = 0
     data_array = []
     while i < 1000:
@@ -56,8 +56,9 @@ def generate_data():
                                         np.array([1, 1]).reshape(2, 1), .00005,
                                         100)
         trace = np.trace(mat)
-        if all([determinant, trace, iterations_max, iterations_min]):
-            data_array.append((determinant, trace, iterations_max, iterations_min))
+        tr_inv = np.trace(mat_inv)
+        if all([determinant, trace, tr_inv, iterations_max, iterations_min]):
+            data_array.append((determinant, trace, tr_inv, iterations_max, iterations_min))
             i+= 1
     return data_array
 

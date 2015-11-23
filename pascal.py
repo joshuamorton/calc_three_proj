@@ -15,13 +15,13 @@ def pascal_matrix(n):
      [1,4,10,20]]
     """
     return np.matrix([[combination(x+y-2, y-1) for y in range(1,n+1)]
-                      for x in range(1,n+1)], dtype=float)
+                      for x in range(1,n+1)], dtype='double')
 
 def harmonic_vector(n):
     """
     create a vector in the form [1,1/2,1/3,...1/n]
     """
-    return np.array([[1.0 / i] for i in range(1, n + 1)])
+    return np.array([[1.0 / i] for i in range(1, n + 1)], dtype='double')
 
 
 def mult(a, b):
@@ -156,6 +156,10 @@ def solve_qr_b(A, b):  # 1c
     sol_err = norm_inf(mult(A, x_vec) - b)
     return x_vec, err, sol_err
 
+
+def load_matrix(file):
+    with open(file) as f:
+        np.matrix([line.split(",") for line in f.readlines()], dtype='double')
 
 def main():  # 1d
     print "solving with lu"
